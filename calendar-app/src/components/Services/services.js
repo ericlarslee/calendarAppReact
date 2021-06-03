@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 
+// 2/5
+
 let apiEndpoint = 'http://127.0.0.1:8000/';
 
 export async function registerUser(user){
