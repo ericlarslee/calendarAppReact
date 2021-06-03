@@ -5,15 +5,15 @@ import UseForm from '../components/formFiles/useForm';
 
 export const LoginScreen = () => {
     const [user, setUser] = UseForm({
-        username:'',
+        email:'',
         password:'',
 });
 
-const loginUser = (user) => {
-    console.log(user);
-    loginUser(user);
-    window.loaction = '/'
-}
+// const loginUser = (user) => {
+//     console.log(user);
+//     loginUser(user);
+//     window.location = '/';
+// }
 
 return (
     <div>

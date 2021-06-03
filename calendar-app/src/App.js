@@ -4,6 +4,7 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import { Home } from './pages/home';
 import { RegisterScreen } from './pages/signUp';
 import { LoginScreen } from './pages/login';
 
@@ -14,10 +15,9 @@ export default function App() {
     <Router>
       <div className="App bg">
         <Switch>
-          <Route path='/' exact component ={LoginScreen} />
-          {/* <Route path='/login' component={LoginScreen} />
-          <Route path='/logout' component={Logout} />
-          <Route path='/signup' component={Signup} /> */}
+          <Route path='/' exact component ={Home} />
+          <Route path='/login' component={LoginScreen} />
+          <Route path='/signup' component={RegisterScreen} />
         </Switch>  
       </div>
     </Router>

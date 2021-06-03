@@ -5,15 +5,17 @@ import axios from 'axios';
 
 let apiEndpoint = 'http://127.0.0.1:8000/';
 
-export async function registerUser(user){
+export async function registerUser(input){
+    let user = {"email": input.email, "password": input.password, "profile":{"first_name": input.first_name, "last_name": input.last_name, "address": input.address}}
     try {
         const response = await axios.post(apiEndpoint + 'signup', user);
         if (response.status ===201){
-            console.log('User has been registered');
-            return response.data;
+            console.log('User has been registered', response.data);
+            return window.location = '/login';
         }
     }
     catch(ex){
+        alert("Invalid input has been given");
         console.log('Error', ex);
         throw ex;
     }
@@ -23,8 +25,9 @@ export async function loginUser(user){
     try {
         const response = await axios.post(apiEndpoint + 'signin', user);
         console.log('User has been logged in');
-        localStorage.setItem('token', response.token);
-        return response.data
+        localStorage.setItem('token', response.data.token);
+        console.log(response.data);
+        return window.location = '/';
     }
     catch(ex){
         console.log("Error", ex);
@@ -32,7 +35,7 @@ export async function loginUser(user){
     }
 }
 
-export async function getCurrentUser(){
+export async function getUserProfile(){
     try {
         const jwt = localStorage.getItem('token');
         const response = await axios.get(apiEndpoint + 'profile', {headers: {Authorization: 'Bearer ' + jwt}});
@@ -78,4 +81,9 @@ export async function getUserSummarys(){
     catch(ex){
         console.log("Error", ex);
     }
+}
+
+export function logoutUser(){
+    localStorage.removeItem('token');
+    window.location = '/';
 }

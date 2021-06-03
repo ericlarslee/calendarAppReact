@@ -11,11 +11,11 @@ export const RegisterScreen = () => {
         last_name:'',
         address:''});
     
-    const registerNewUser = (newUser) => {
-        console.log(newUser)
-        // registerUser(newUser);
-        // window.location = '/';
-    }
+    // const registerNewUser = (newUser) => {
+    //     console.log(newUser)
+    //     // registerUser(newUser);
+    //     // window.location = '/';
+    // }
 
     return (
         <div>
@@ -45,7 +45,7 @@ export const RegisterScreen = () => {
                     <Form.Control type="text" placeholder="Address" name="address" value={newUser.address} onChange={setNewUser} />
                 </Form.Group>  
             </Form>
-            <Button onClick={() => registerNewUser(newUser)}>
+            <Button onClick={() => registerUser(newUser)}>
                 Register
             </Button>
         </div>
