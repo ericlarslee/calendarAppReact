@@ -3,7 +3,7 @@ import { loginUser } from '../components/Services/services';
 import { Button, Form } from 'react-bootstrap';
 import UseForm from '../components/formFiles/useForm';
 
-export const LoginScreen = () => {
+export const LoginScreen = (props) => {
     const [user, setUser] = UseForm({
         email:'',
         password:'',

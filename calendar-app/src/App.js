@@ -4,7 +4,7 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import { Home } from './pages/home';
+import Home from './pages/home';
 import { RegisterScreen } from './pages/signUp';
 import { LoginScreen } from './pages/login';
 
@@ -21,6 +21,6 @@ export default function App() {
         </Switch>  
       </div>
     </Router>
-  )
+  );
 }
   

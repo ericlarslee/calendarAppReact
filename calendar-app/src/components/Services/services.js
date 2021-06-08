@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import jwtDecode from 'jwt-decode';
 
 // 2/5
 
@@ -51,10 +52,10 @@ export async function getUserProfile(){
     }
 }
 
-export async function getUserEvents(){
+export async function getUserEvents(userId, date){
     try {
         const jwt = localStorage.getItem('token');
-        const response = await axios.get(apiEndpoint + 'events', {headers: {Authorization: 'Bearer ' + jwt}});
+        const response = await axios.get(apiEndpoint + `events/?user=${userId}&date=${date}`, {headers: {Authorization: 'Bearer ' + jwt}});
         console.log(response.data);
 
         if (response.status === 200){
@@ -67,10 +68,10 @@ export async function getUserEvents(){
     }
 }
 
-export async function getUserSummarys(){
+export async function getUserSummarys(userId, date){
     try {
         const jwt = localStorage.getItem('token');
-        const response = await axios.get(apiEndpoint + 'summarys', {headers: {Authorization: 'Bearer ' + jwt}});
+        const response = await axios.get(apiEndpoint + `summarys/?user=${userId}&date=${date}` , {headers: {Authorization: 'Bearer ' + jwt}});
         console.log(response.data);
 
         if (response.status === 200){
@@ -86,4 +87,14 @@ export async function getUserSummarys(){
 export function logoutUser(){
     localStorage.removeItem('token');
     window.location = '/';
+}
+
+export function decodeJWT(){
+    const jwt = localStorage.getItem('token');
+    return jwtDecode(jwt);
+}
+
+export function getDate(){
+    let today = new Date();
+    return today.toISOString().substring(0,10);
 }
