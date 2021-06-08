@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import { Redirect } from 'react-router';
-import { getUserProfile, decodeJWT, getDate } from '../components/Services/services';
+import { getUserProfile, decodeJWT, getDate, getAllUserEvents, getAllUserSummarys } from '../components/Services/services';
 
 
 
@@ -21,41 +21,48 @@ const Home = () => {
     // )
     const [user, setUser] = useState([]);
     const [jwt, setJwt] = useState(localStorage.getItem('token'));
-    const [decodedJwt, setDecodedJwt] = useState();
+    const [decodedJwt, setDecodedJwt] = useState([]);
     const [calendar, setCalendar] = useState([]);
     const [date, setDate] = useState();
-    // useEffect(() => {
-    //     async function getUser(){
-    //         const tempUser = await getUserProfile();
-    //         setUser(tempUser.data);
-    //     }
-    //     getUser();
-    //     let tempDecodedJwt = decodeJWT();
-    //     setDecodedJwt(tempDecodedJwt);
-    //     let tempDate = getDate();
-    //     setDate(tempDate);
-    //     console.log('user:', user, 'jwt:', jwt, 'decodedJWT:', decodedJwt, 'date:', date);
-    // });
+    const [events, setEvents] = useState([]);
+    const [summarys, setSummarys] = useState([]);
 
     useEffect(() => {
-        async function getUser(){
-            const tempUser = await getUserProfile();
-            setUser(tempUser.data[0]);
-        }
-        getUser();
-    },[]);
-    
-    useEffect(() => {
+        getUserProfile().then(response => {
+            setUser(response.data);
+        }).catch(error => {
+            console.log(error)
+        });
+        // if(user === undefined || user === null){
+        //     Redirect
+        // }
         let tempDecodedJwt = decodeJWT();
         setDecodedJwt(tempDecodedJwt);
-    },[]);
-
-    useEffect(() => {
         let tempDate = getDate();
         setDate(tempDate);
-    },[]);
+        console.log('user:', user, 'jwt:', jwt, 'decodedJWT:', decodedJwt, 'date:', date);
+    }, []);
 
-    console.log('user:', user, 'jwt:', jwt, 'decodedJWT:', decodedJwt, 'date:', date);
+    useEffect(() => {
+        getAllUserEvents().then(response => {
+            setEvents(response.data);
+            console.log(events);
+        }).catch(error => {
+            console.log(error)
+        });
+        getAllUserSummarys().then(response => {
+            setSummarys(response.data);
+            console.log(summarys);
+        }).catch(error => {
+            console.log(error)
+        });
+    }, [user]);
+
+    // useEffect(() => {
+    //     async function get(){
+
+    //     }
+    // });
 
     // console.log(user.data);
 // [user], [jwt], [decodedJwt]

@@ -68,10 +68,48 @@ export async function getUserEvents(userId, date){
     }
 }
 
+export async function getAllUserEvents(){
+    try {
+        const jwt = localStorage.getItem('token');
+        let userInfo = jwtDecode(jwt);
+        console.log(userInfo);
+        let userId = userInfo.user_id;
+        const response = await axios.get(apiEndpoint + `events/?user=${userId}`, {headers: {Authorization: 'Bearer ' + jwt}});
+        console.log(response.data);
+
+        if (response.status === 200){
+            return response.data;
+        }
+        return null;
+    }
+    catch(ex){
+        console.log("Error", ex);
+    }
+}
+
 export async function getUserSummarys(userId, date){
     try {
         const jwt = localStorage.getItem('token');
         const response = await axios.get(apiEndpoint + `summarys/?user=${userId}&date=${date}` , {headers: {Authorization: 'Bearer ' + jwt}});
+        console.log(response.data);
+
+        if (response.status === 200){
+            return response.data;
+        }
+        return null;
+    }
+    catch(ex){
+        console.log("Error", ex);
+    }
+}
+
+export async function getAllUserSummarys(){
+    try {
+        const jwt = localStorage.getItem('token');
+        let userInfo = jwtDecode(jwt);
+        console.log(userInfo);
+        let userId = userInfo.user_id;
+        const response = await axios.get(apiEndpoint + `summarys/?user=${userId}` , {headers: {Authorization: 'Bearer ' + jwt}});
         console.log(response.data);
 
         if (response.status === 200){
