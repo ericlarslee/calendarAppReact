@@ -5,6 +5,7 @@ import jwtDecode from 'jwt-decode';
 // 2/5
 
 let apiEndpoint = 'http://127.0.0.1:8000/';
+let weatherEndpoint = '';
 
 export async function registerUser(input){
     let user = {"email": input.email, "password": input.password, "profile":{"first_name": input.first_name, "last_name": input.last_name, "address": input.address}}
@@ -75,10 +76,10 @@ export async function getAllUserEvents(){
         console.log(userInfo);
         let userId = userInfo.user_id;
         const response = await axios.get(apiEndpoint + `events/?user=${userId}`, {headers: {Authorization: 'Bearer ' + jwt}});
-        console.log(response.data);
+        console.log(response);
 
         if (response.status === 200){
-            return response.data;
+            return  response;
         }
         return null;
     }
@@ -91,10 +92,10 @@ export async function getUserSummarys(userId, date){
     try {
         const jwt = localStorage.getItem('token');
         const response = await axios.get(apiEndpoint + `summarys/?user=${userId}&date=${date}` , {headers: {Authorization: 'Bearer ' + jwt}});
-        console.log(response.data);
+        console.log(response);
 
         if (response.status === 200){
-            return response.data;
+            return response;
         }
         return null;
     }
@@ -110,10 +111,10 @@ export async function getAllUserSummarys(){
         console.log(userInfo);
         let userId = userInfo.user_id;
         const response = await axios.get(apiEndpoint + `summarys/?user=${userId}` , {headers: {Authorization: 'Bearer ' + jwt}});
-        console.log(response.data);
+        console.log(response);
 
         if (response.status === 200){
-            return response.data;
+            return response;
         }
         return null;
     }

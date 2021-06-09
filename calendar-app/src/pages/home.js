@@ -46,38 +46,66 @@ const Home = () => {
         console.log('user:', user, 'jwt:', jwt, 'decodedJWT:', decodedJwt, 'date:', date);
     }, []);
 
-    useEffect(() => {
-        console.log(decodedJwt);
-        getAllUserEvents().then(response => {
-            setEvents(response.data);
-            console.log(events);
-        }).catch(error => {
-            console.log(error)
-        });
-        getAllUserSummarys().then(response => {
-            setSummarys(response.data);
-            console.log(summarys);
-        }).catch(error => {
-            console.log(error)
-        });
+    useEffect(async() => {
+        // console.log(decodedJwt);
+        // getAllUserEvents().then(response => {
+        //     setEvents(response.data);
+        //     console.log('events:', events);
+        //     return
+        // }).catch(error => {
+        //     console.log(error)
+        // });
+        // setEvents(response1);
+        async function fetchEventData() {
+            let eventResponse = await getAllUserEvents();
+            return eventResponse
+        }
+        let eventsData = await fetchEventData();
+        // getAllUserSummarys().then(response => {
+        //     setSummarys(response.data);
+        //     console.log('summarys1:', summarys);
+        //     return
+        // }).catch(error => {
+        //     console.log(error);
+        // });
+        // setSummarys(response2);
+        async function fetchSummaryData() {
+            let summaryResponse = await getAllUserSummarys();
+            return summaryResponse
+        }
+        let summaryData = await fetchSummaryData();
+        console.log('summarys & events:', summaryData, eventsData);
     }, [user]);
 
+    useEffect(() => {
+        mapEvents();
+        mapSummary();
+    }, [summarys])
+
     function mapEvents(events){
-        return events.map(event =>
-            <EventCard
-            key={event.id}
-            body={event.body}
-            />
-        );
+        if(events === undefined){
+            return
+        }else{
+            return events.map(event =>
+                <EventCard
+                key={event.id}
+                body={event.body}
+                />
+            );
+        }
     }
 
     function mapSummary(summary){
-        return summary.map(summary =>
-            <SummaryCard
-            key={summary.id}
-            body={summary.body}
-            />
-        );
+        if(summary === undefined){
+            return
+        }else{
+            return summary.map(summary =>
+                <SummaryCard
+                key={summary.id}
+                body={summary.body}
+                />
+            );
+        }
     }
 
     return(
@@ -86,7 +114,7 @@ const Home = () => {
             date={date}
             name={user.first_name}
             />
-            {/* <ShowSummaryCard mapSummary={() => mapSummary(summarys[0])} /> */}
+            <ShowSummaryCard mapSummary={() => mapSummary(summarys[0])} />
         </div>
     );
 }
