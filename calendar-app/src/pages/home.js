@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import { Redirect } from 'react-router';
-import { getUserProfile, getAllUserEvents, getAllUserSummarys } from '../components/Services/services';
+import { getUserProfile, getAllUserEvents, getAllUserSummarys, getWeather } from '../components/Services/services';
 import SummaryCard from '../components/cards/summaryCard';
 import ShowSummaryCard from '../components/cards/showSummaryCard.js';
 import EventCard from '../components/cards/eventCard.js';
@@ -12,10 +12,12 @@ import ListEventCards from '../components/cards/listEventCards.js';
 const Home = () => {
     const [user, setUser] = useState([]);
     const [jwt, setJwt] = useState(localStorage.getItem('token'));
+    const [weatherData, setWeatherData] = useState([]);
     const [dataDate, setDataDate] = useState();
     const [userDate, setUserDate]= useState();
     const [events, setEvents] = useState([]);
     const [summarys, setSummarys] = useState([]);
+    
 
     useEffect(async() => {
         async function fetchUserData() {
@@ -43,10 +45,12 @@ const Home = () => {
         }
         let summaryData = await fetchSummaryData();
         setSummarys(summaryData);
+        let weatherResponse = await getWeather(56601);
+        setWeatherData(weatherResponse.data.current);
     }, [user]);
 
     useEffect(() => {
-        console.log('user:', user, 'jwt:', jwt, 'datadate:', dataDate, 'userdate:', userDate, 'events:', events, 'summarys:', summarys)
+        console.log('user:', user, 'jwt:', jwt, 'datadate:', dataDate, 'userdate:', userDate, 'events:', events, 'summarys:', summarys, 'weatherData:', weatherData)
     },[user, jwt, dataDate, userDate, events, summarys])
 
 
@@ -81,6 +85,7 @@ const Home = () => {
             <ListEventCards mapEvents={() => mapEvents(events)}
             date={userDate}
             name={user.first_name}
+            weatherData={weatherData}
             />
             <ShowSummaryCard mapSummary={() => mapSummary(summarys)} />
             

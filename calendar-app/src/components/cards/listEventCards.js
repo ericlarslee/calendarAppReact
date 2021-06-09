@@ -8,6 +8,9 @@ const ListEventCards = (props) => {
                 <Card.Title>{props.date}</Card.Title>
                 <Card.Text>
                     Hello, {props.name}
+                    <br />
+                    <image src="{props.weatherData.condition.icon}" />
+                    Feels Like: {props.weatherData.feelslike_f}
                 </Card.Text>
             </Card.Body>
             <ListGroup className="list-group-flush">
