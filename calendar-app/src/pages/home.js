@@ -1,6 +1,10 @@
 import { React, useState, useEffect } from 'react';
 import { Redirect } from 'react-router';
 import { getUserProfile, decodeJWT, getDate, getAllUserEvents, getAllUserSummarys } from '../components/Services/services';
+import SummaryCard from '../components/cards/summaryCard';
+import ShowSummaryCard from '../components/cards/showSummaryCard.js';
+import EventCard from '../components/cards/eventCard.js';
+import ListEventCards from '../components/cards/listEventCards.js';
 
 
 
@@ -22,14 +26,13 @@ const Home = () => {
     const [user, setUser] = useState([]);
     const [jwt, setJwt] = useState(localStorage.getItem('token'));
     const [decodedJwt, setDecodedJwt] = useState([]);
-    const [calendar, setCalendar] = useState([]);
     const [date, setDate] = useState();
     const [events, setEvents] = useState([]);
     const [summarys, setSummarys] = useState([]);
 
     useEffect(() => {
         getUserProfile().then(response => {
-            setUser(response.data);
+            setUser(response.data[0]);
         }).catch(error => {
             console.log(error)
         });
@@ -44,6 +47,7 @@ const Home = () => {
     }, []);
 
     useEffect(() => {
+        console.log(decodedJwt);
         getAllUserEvents().then(response => {
             setEvents(response.data);
             console.log(events);
@@ -58,18 +62,32 @@ const Home = () => {
         });
     }, [user]);
 
-    // useEffect(() => {
-    //     async function get(){
+    function mapEvents(events){
+        return events.map(event =>
+            <EventCard
+            key={event.id}
+            body={event.body}
+            />
+        );
+    }
 
-    //     }
-    // });
+    function mapSummary(summary){
+        return summary.map(summary =>
+            <SummaryCard
+            key={summary.id}
+            body={summary.body}
+            />
+        );
+    }
 
-    // console.log(user.data);
-// [user], [jwt], [decodedJwt]
     return(
-        <p>
-            Hello
-        </p>
+        <div>
+            <ListEventCards mapEvents={() => mapEvents(events)}
+            date={date}
+            name={user.first_name}
+            />
+            {/* <ShowSummaryCard mapSummary={() => mapSummary(summarys[0])} /> */}
+        </div>
     );
 }
 export default Home;

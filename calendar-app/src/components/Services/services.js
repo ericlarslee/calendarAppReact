@@ -127,7 +127,7 @@ export function logoutUser(){
     window.location = '/';
 }
 
-export function decodeJWT(){
+export async function decodeJWT(){
     const jwt = localStorage.getItem('token');
     return jwtDecode(jwt);
 }

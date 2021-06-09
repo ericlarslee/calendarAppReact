@@ -7,6 +7,7 @@ import {
 import Home from './pages/home';
 import { RegisterScreen } from './pages/signUp';
 import { LoginScreen } from './pages/login';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 
