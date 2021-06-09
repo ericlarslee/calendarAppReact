@@ -3,7 +3,7 @@ import { Card, ListGroup } from 'react-bootstrap';
 
 const ListEventCards = (props) => {
     return (
-        <Card style={{ width: '26rem' }}>
+        <Card style={{ display:"flex", justifyContent: "center", verticalAlign: 'center', }}>
             <Card.Body>
                 <Card.Title>{props.date}</Card.Title>
                 <Card.Text>

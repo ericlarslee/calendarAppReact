@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import { Redirect } from 'react-router';
-import { getUserProfile, decodeJWT, getDate, getAllUserEvents, getAllUserSummarys } from '../components/Services/services';
+import { getUserProfile, getAllUserEvents, getAllUserSummarys } from '../components/Services/services';
 import SummaryCard from '../components/cards/summaryCard';
 import ShowSummaryCard from '../components/cards/showSummaryCard.js';
 import EventCard from '../components/cards/eventCard.js';
@@ -10,98 +10,66 @@ import ListEventCards from '../components/cards/listEventCards.js';
 
 
 const Home = () => {
-    // const [user, setUser] = useState([]);
-    // const [jwt, setJwt] = useState();
-    // const [decodedJwt, setDecodedJwt] = useState();
-    // var userProfile = getUserProfile();
-    // setUser(userProfile);
-    // setJwt(localStorage.getItem('token'));
-    // setDecodedJwt(decodeJWT());    
-    //     console.log('user:', user, 'jwt:', jwt, 'decodedJWT:', decodedJwt, 'profile:', userProfile);
-    //     return (
-    //         <div>
-    //             Hello
-    //         </div>
-    // )
     const [user, setUser] = useState([]);
     const [jwt, setJwt] = useState(localStorage.getItem('token'));
-    const [decodedJwt, setDecodedJwt] = useState([]);
-    const [date, setDate] = useState();
+    const [dataDate, setDataDate] = useState();
+    const [userDate, setUserDate]= useState();
     const [events, setEvents] = useState([]);
     const [summarys, setSummarys] = useState([]);
 
-    useEffect(() => {
-        getUserProfile().then(response => {
-            setUser(response.data[0]);
-        }).catch(error => {
-            console.log(error)
-        });
-        // if(user === undefined || user === null){
-        //     Redirect
-        // }
-        let tempDecodedJwt = decodeJWT();
-        setDecodedJwt(tempDecodedJwt);
-        let tempDate = getDate();
-        setDate(tempDate);
-        console.log('user:', user, 'jwt:', jwt, 'decodedJWT:', decodedJwt, 'date:', date);
+    useEffect(async() => {
+        async function fetchUserData() {
+            let userResponse = await getUserProfile();
+            return userResponse
+        }
+        let userData = await fetchUserData();
+        setUser(userData.data[0]);
+        let today = new Date().toISOString().substring(0,10);
+        let today2 = new Date().toDateString().substring(0,10);
+        setDataDate(today);
+        setUserDate(today2);
     }, []);
 
     useEffect(async() => {
-        // console.log(decodedJwt);
-        // getAllUserEvents().then(response => {
-        //     setEvents(response.data);
-        //     console.log('events:', events);
-        //     return
-        // }).catch(error => {
-        //     console.log(error)
-        // });
-        // setEvents(response1);
         async function fetchEventData() {
             let eventResponse = await getAllUserEvents();
-            return eventResponse
+            return eventResponse.data
         }
         let eventsData = await fetchEventData();
-        // getAllUserSummarys().then(response => {
-        //     setSummarys(response.data);
-        //     console.log('summarys1:', summarys);
-        //     return
-        // }).catch(error => {
-        //     console.log(error);
-        // });
-        // setSummarys(response2);
+        setEvents(eventsData);
         async function fetchSummaryData() {
             let summaryResponse = await getAllUserSummarys();
-            return summaryResponse
+            return summaryResponse.data
         }
         let summaryData = await fetchSummaryData();
-        console.log('summarys & events:', summaryData, eventsData);
+        setSummarys(summaryData);
     }, [user]);
 
     useEffect(() => {
-        mapEvents();
-        mapSummary();
-    }, [summarys])
+        console.log('user:', user, 'jwt:', jwt, 'datadate:', dataDate, 'userdate:', userDate, 'events:', events, 'summarys:', summarys)
+    },[user, jwt, dataDate, userDate, events, summarys])
+
 
     function mapEvents(events){
         if(events === undefined){
             return
         }else{
-            return events.map(event =>
+            return events.map((event, index) =>
                 <EventCard
-                key={event.id}
+                key={index}
                 body={event.body}
                 />
             );
         }
     }
 
-    function mapSummary(summary){
-        if(summary === undefined){
+    function mapSummary(summarys){
+        if(summarys === undefined){
             return
         }else{
-            return summary.map(summary =>
+            return summarys.map((summary, index) =>
                 <SummaryCard
-                key={summary.id}
+                key={index}
                 body={summary.body}
                 />
             );
@@ -111,10 +79,11 @@ const Home = () => {
     return(
         <div>
             <ListEventCards mapEvents={() => mapEvents(events)}
-            date={date}
+            date={userDate}
             name={user.first_name}
             />
-            <ShowSummaryCard mapSummary={() => mapSummary(summarys[0])} />
+            <ShowSummaryCard mapSummary={() => mapSummary(summarys)} />
+            
         </div>
     );
 }

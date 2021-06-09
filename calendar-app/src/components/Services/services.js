@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
+import weatherKey from './weatherKey';
 
 // 2/5
 
@@ -133,7 +134,15 @@ export async function decodeJWT(){
     return jwtDecode(jwt);
 }
 
-export function getDate(){
-    let today = new Date();
-    return today.toISOString().substring(0,10);
+export async function getWeather(zipcode){
+    try {
+        const response = await axios.get(`http://api.weatherapi.com/v1/current.json?key=${weatherKey}&q=${zipcode}&aqi=no`);
+        if (response.status ===200){
+            return response;
+        }
+        return null;
+    }
+    catch(ex){
+        console.log('Error', ex);
+    }
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 
 const SummaryCard = (props) => {
-    return (
+    return(
         <Card.Body>
             <blockquote className="blockquote mb-0">
                 <p>
