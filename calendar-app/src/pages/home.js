@@ -5,19 +5,27 @@ import SummaryCard from '../components/cards/summaryCard';
 import ShowSummaryCard from '../components/cards/showSummaryCard.js';
 import EventCard from '../components/cards/eventCard.js';
 import ListEventCards from '../components/cards/listEventCards.js';
+import ReactDatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+import useForm from '../components/formFiles/useForm';
+import { Form } from 'react-bootstrap';
 
 
 
 
-const Home = () => {
+const Home = (props) => {
     const [user, setUser] = useState([]);
     const [jwt, setJwt] = useState(localStorage.getItem('token'));
     const [weatherData, setWeatherData] = useState([]);
+    const [weatherImage, setWeatherImage] = useState("");
     const [dataDate, setDataDate] = useState();
     const [userDate, setUserDate]= useState();
     const [events, setEvents] = useState([]);
     const [summarys, setSummarys] = useState([]);
-    
+    const [dateForm, setDateForm] = useForm({date: ''});
+
+    useEffect(() => {
+    },[props])
 
     useEffect(async() => {
         async function fetchUserData() {
@@ -31,7 +39,13 @@ const Home = () => {
         setDataDate(today);
         setUserDate(today2);
     }, []);
-
+    
+    useEffect(async() =>{
+        let weatherResponse = await getWeather(56601);
+            setWeatherData(weatherResponse.current);
+            setWeatherImage(weatherResponse.current.condition.icon);  
+    },[user])
+    
     useEffect(async() => {
         async function fetchEventData() {
             let eventResponse = await getAllUserEvents();
@@ -45,12 +59,11 @@ const Home = () => {
         }
         let summaryData = await fetchSummaryData();
         setSummarys(summaryData);
-        let weatherResponse = await getWeather(56601);
-        setWeatherData(weatherResponse.data.current);
-    }, [user]);
+        
+    }, [weatherData]);
 
     useEffect(() => {
-        console.log('user:', user, 'jwt:', jwt, 'datadate:', dataDate, 'userdate:', userDate, 'events:', events, 'summarys:', summarys, 'weatherData:', weatherData)
+        console.log('user:', user, 'jwt:', jwt, 'datadate:', dataDate, 'userdate:', userDate, 'events:', events, 'summarys:', summarys, 'weatherData:', weatherData, 'selectedDate:', dateForm.date);
     },[user, jwt, dataDate, userDate, events, summarys])
 
 
@@ -61,7 +74,8 @@ const Home = () => {
             return events.map((event, index) =>
                 <EventCard
                 key={index}
-                body={event.body}
+                name={event.name}
+                description={event.description}
                 />
             );
         }
@@ -82,13 +96,21 @@ const Home = () => {
 
     return(
         <div>
+            <Form>
+                <Form.Group className="mb-3" controlId="date">
+                    <Form.Label>Selected Date:</Form.Label>
+                    <Form.Control type="date" placeholder={dataDate} name="date" value={dateForm.date} onChange={setDateForm} />
+                    <Form.Text className="text-muted">
+                    </Form.Text>
+                </Form.Group>
+            </Form>
             <ListEventCards mapEvents={() => mapEvents(events)}
             date={userDate}
             name={user.first_name}
             weatherData={weatherData}
+            image={weatherImage}
             />
             <ShowSummaryCard mapSummary={() => mapSummary(summarys)} />
-            
         </div>
     );
 }

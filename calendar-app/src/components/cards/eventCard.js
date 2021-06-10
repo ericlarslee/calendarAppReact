@@ -4,7 +4,8 @@ import { ListGroupItem } from 'react-bootstrap';
 const EventCard = (props) => {
     return(
         <>
-            {props.body}
+            {props.name}
+            {props.description}
         </>
     );
 }

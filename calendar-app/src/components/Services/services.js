@@ -138,7 +138,7 @@ export async function getWeather(zipcode){
     try {
         const response = await axios.get(`http://api.weatherapi.com/v1/current.json?key=${weatherKey}&q=${zipcode}&aqi=no`);
         if (response.status ===200){
-            return response;
+            return response.data;
         }
         return null;
     }

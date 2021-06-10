@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const UseForm = initialValues => {
+const useForm = initialValues => {
     const [values, setValues] = useState(initialValues);
     return [
         values,
@@ -13,4 +13,4 @@ const UseForm = initialValues => {
     ];
 };
 
-export default UseForm;
+export default useForm;
