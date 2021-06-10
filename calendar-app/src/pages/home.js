@@ -13,7 +13,6 @@ import { Form, Button, Container, Card } from 'react-bootstrap';
 
 const Home = (props) => {
     const [user, setUser] = useState([]);
-    const [isCurrent, setIsCurrent] = useState(false);
     const [jwt, setJwt] = useState(localStorage.getItem('token'));
     const [weatherData, setWeatherData] = useState([]);
     const [weatherImage, setWeatherImage] = useState("");
@@ -78,6 +77,7 @@ const Home = (props) => {
         setDataDate(today);
         eventForm.date = today;
         summaryForm.date = today;
+        dateForm.date = today;
         setUserDate(today2);
     }, []);
     
@@ -100,9 +100,8 @@ const Home = (props) => {
         }
         let summaryData = await fetchSummaryData();
         setSummarys(summaryData);
-        setIsCurrent(true);
         
-    }, [weatherData, isCurrent]);
+    }, [weatherData]);
     
     useEffect(() => {
         console.log('user:', user, 'jwt:', jwt, 'datadate:', dataDate, 'userdate:', userDate, 'events:', events, 'summarys:', summarys, 'weatherData:', weatherData, 'selectedDate:', dateForm.date, 'event form:', eventForm, 'summary form:', summaryForm, 'future event form:', futureEventForm);
@@ -113,7 +112,8 @@ const Home = (props) => {
         if(events === undefined){
             return
         }else{
-            return events.map((event) =>
+            let tempEvents = events.filter(event => event.date.includes(dateForm.date));
+            return tempEvents.map((event) =>
                 <EventCard
                 key={event.id}
                 id={event.id}
@@ -129,7 +129,8 @@ const Home = (props) => {
         if(summarys === undefined){
             return
         }else{
-            return summarys.map((summary) =>
+            let tempSummarys = summarys.filter(summary => summary.date.includes(dateForm.date));
+            return tempSummarys.map((summary) =>
                 <SummaryCard
                 key={summary.id}
                 id={summary.id}
@@ -206,7 +207,7 @@ const Home = (props) => {
                     <Form.Label>Enter a summary</Form.Label>
                     <Form.Control type="text-area" placeholder="Write an entry here" name="body" value={summaryForm.body} onChange={setSummaryForm} />
                 </Form.Group>
-                <Button onclick={() => postSummary(summaryForm)} >Add summary</Button><Button onClick={() => CloseForm()} type="submit">Close form</Button>
+                <Button onClick={() => postSummary(summaryForm)} >Add summary</Button><Button onClick={() => CloseForm()} type="submit">Close form</Button>
             </Form>
             }
             {/* </Row> */}
