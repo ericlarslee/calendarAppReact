@@ -7,7 +7,6 @@ const ListEventCards = (props) => {
     useEffect(()=> {
     setWeather(props.weatherData);
     },[props])
-    // console.log('here:', weather.condition);
     if(props.weatherData===undefined){
         return
     }else{
@@ -25,10 +24,12 @@ const ListEventCards = (props) => {
                         Feels Like: {weather.feelslike_f} &deg;F
                     </Card.Text>}
                 </Card.Body>
-                <ListGroup className="list-group-flush">
-                    {props.mapEventCards}
+                <Card.Body>
+                    <ListGroup className="list-group-flush">
+                        {props.mapEvents()}
 
-                </ListGroup>
+                    </ListGroup>
+                </Card.Body>
             </Card>
         );
     }

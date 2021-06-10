@@ -1,5 +1,5 @@
 import React from 'react';
-import { registerUser } from '../components/Services/services';
+import { registerUser, toLoginPage } from '../components/Services/services';
 import { Button, Form } from 'react-bootstrap';
 import UseForm from '../components/formFiles/useForm';
 
@@ -42,6 +42,7 @@ export const RegisterScreen = () => {
             <Button onClick={() => registerUser(newUser)}>
                 Register
             </Button>
+               Already a user?   <Button onClick={() => toLoginPage()} type="submit">Sign In</Button>
         </div>
     )
 }

@@ -152,3 +152,7 @@ export async function getWeather(zipcode){
 export function toRegisterPage(){
     return window.location = '/signup';
 }
+
+export function toLoginPage(){
+    return window.location = '/login'
+}
