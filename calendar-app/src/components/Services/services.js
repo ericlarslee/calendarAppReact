@@ -6,7 +6,6 @@ import weatherKey from './weatherKey';
 // 2/5
 
 let apiEndpoint = 'http://127.0.0.1:8000/';
-let weatherEndpoint = '';
 
 export async function registerUser(input){
     let user = {"email": input.email, "password": input.password, "profile":{"first_name": input.first_name, "last_name": input.last_name, "address": input.address}}
@@ -41,6 +40,9 @@ export async function loginUser(user){
 export async function getUserProfile(){
     try {
         const jwt = localStorage.getItem('token');
+        if(jwt===undefined || jwt ===null){
+            return window.location = '/login';
+        }
         const response = await axios.get(apiEndpoint + 'profile', {headers: {Authorization: 'Bearer ' + jwt}});
         console.log(response.data);
 
@@ -145,4 +147,8 @@ export async function getWeather(zipcode){
     catch(ex){
         console.log('Error', ex);
     }
+}
+
+export function toRegisterPage(){
+    return window.location = '/signup';
 }

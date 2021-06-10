@@ -1,14 +1,13 @@
 import { React, useState, useEffect } from 'react';
 import { Redirect } from 'react-router';
-import { getUserProfile, getAllUserEvents, getAllUserSummarys, getWeather } from '../components/Services/services';
+import { getUserProfile, getAllUserEvents, getAllUserSummarys, getWeather, logoutUser } from '../components/Services/services';
 import SummaryCard from '../components/cards/summaryCard';
 import ShowSummaryCard from '../components/cards/showSummaryCard.js';
 import EventCard from '../components/cards/eventCard.js';
 import ListEventCards from '../components/cards/listEventCards.js';
-import ReactDatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import useForm from '../components/formFiles/useForm';
-import { Form } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 
 
 
@@ -96,6 +95,7 @@ const Home = (props) => {
 
     return(
         <div>
+            <Button onClick={logoutUser} type="submit">Logout</Button>
             <Form>
                 <Form.Group className="mb-3" controlId="date">
                     <Form.Label>Selected Date:</Form.Label>

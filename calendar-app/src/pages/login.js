@@ -1,19 +1,14 @@
 import React from 'react';
-import { loginUser } from '../components/Services/services';
+import { loginUser, toRegisterPage } from '../components/Services/services';
 import { Button, Form } from 'react-bootstrap';
 import UseForm from '../components/formFiles/useForm';
+import { Redirect } from 'react-router';
 
-export const LoginScreen = (props) => {
+export const LoginScreen = () => {
     const [user, setUser] = UseForm({
         email:'',
         password:'',
 });
-
-// const loginUser = (user) => {
-//     console.log(user);
-//     loginUser(user);
-//     window.location = '/';
-// }
 
 return (
     <div>
@@ -32,6 +27,7 @@ return (
         <Button onClick={() => loginUser(user)}>
             Log In
         </Button>
+        <Button onClick={() => toRegisterPage()} type="submit">Register</Button>
     </div>
 )
 }
