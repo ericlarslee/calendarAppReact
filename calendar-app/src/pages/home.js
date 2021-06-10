@@ -1,13 +1,14 @@
 import { React, useState, useEffect } from 'react';
 import { Redirect } from 'react-router';
-import { getUserProfile, getAllUserEvents, getAllUserSummarys, getWeather, logoutUser, decodeJWT, postEvent, postSummary } from '../components/Services/services';
+import { getUserProfile, getAllUserEvents, getAllUserSummarys, getWeather, logoutUser, decodeJWT, postEvent, postSummary, deleteEvent, deleteSummary } from '../components/Services/services';
 import SummaryCard from '../components/cards/summaryCard';
 import ShowSummaryCard from '../components/cards/showSummaryCard.js';
 import EventCard from '../components/cards/eventCard.js';
 import ListEventCards from '../components/cards/listEventCards.js';
 import "react-datepicker/dist/react-datepicker.css";
 import useForm from '../components/formFiles/useForm';
-import { Form, Button, Modal } from 'react-bootstrap';
+import { Form, Button, Container, Card } from 'react-bootstrap';
+
 
 
 const Home = (props) => {
@@ -115,8 +116,10 @@ const Home = (props) => {
             return events.map((event) =>
                 <EventCard
                 key={event.id}
+                id={event.id}
                 name={event.name}
                 description={event.description}
+                deleteEvent={deleteEvent}
                 />
             );
         }
@@ -129,6 +132,7 @@ const Home = (props) => {
             return summarys.map((summary) =>
                 <SummaryCard
                 key={summary.id}
+                id={summary.id}
                 body={summary.body}
                 />
             );
@@ -136,8 +140,12 @@ const Home = (props) => {
     }
 
     return(
-        <div>
-            <Button onClick={logoutUser} type="submit">Logout</Button>
+        <div style={{}}>
+            {/* <Container className="display-flex" style={{display:"flex", justifyContent: "center"}}> */}
+            {/* <Row className="justify-content-center"></Row> */}
+            <div style={{position: 'relative', right:'-90%'}}>
+                <Button variant="success" onClick={logoutUser} type="submit">Logout</Button>
+            </div>
             {showButton && <Button onClick={() => FutureEventFormAction()} type="submit">Add a future Event</Button>}
             {showFutureEventForm &&
             <Form>
@@ -157,7 +165,7 @@ const Home = (props) => {
                 <Button onClick={() => CloseForm()} type="submit">Close form</Button>
             </Form>}
             
-            <Form>
+            <Form style={{}}>
                 <Form.Group className="mb-3" controlId="date">
                     <Form.Label>Selected Date:</Form.Label>
                     <Form.Control type="date" placeholder={dataDate} name="date" value={dateForm.date} onChange={setDateForm} />
@@ -165,14 +173,16 @@ const Home = (props) => {
                     </Form.Text>
                 </Form.Group>
             </Form>
-            <ListEventCards mapEvents={() => mapEvents(events)}
-            date={userDate}
-            name={user.first_name}
-            weatherData={weatherData}
-            image={weatherImage}
-            />
-            <ShowSummaryCard mapSummary={() => mapSummary(summarys)} />
-                        
+            <Card style={{display:"block", justifyContent: "center", textAlign: 'center', verticalAlign: 'middle', border: '1px solid black', marginTop: '10%', width: '50%', position:'relative', left:'25%'}}>
+                <ListEventCards mapEvents={() => mapEvents(events)}
+                date={userDate}
+                name={user.first_name}
+                weatherData={weatherData}
+                image={weatherImage}
+                />
+                
+                <ShowSummaryCard mapSummary={() => mapSummary(summarys)} />
+            </Card>            
             {showButton && <Button onClick={() => EventFormAction()} type="submit">Add an Event for Today</Button>}
             
             {showButton && <Button onClick={() => SummaryFormAction()} type="submit">Add a Reflection for Today</Button>}
@@ -199,7 +209,8 @@ const Home = (props) => {
                 <Button onclick={() => postSummary(summaryForm)} >Add summary</Button><Button onClick={() => CloseForm()} type="submit">Close form</Button>
             </Form>
             }
-
+            {/* </Row> */}
+        {/* </Container> */}
         </div>
     );
 }

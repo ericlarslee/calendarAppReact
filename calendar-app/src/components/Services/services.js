@@ -127,6 +127,7 @@ export async function postEvent(event){
 
         if (response.status === 201){
             alert('The event was posted');
+            window.location='/'
             return
         }
         return null;
@@ -144,6 +145,43 @@ export async function postSummary(summary){
 
         if (response.status === 201){
             alert('The summary was posted');
+            window.location='/'
+            return
+        }
+        return null;
+    }
+    catch(ex){
+        console.log("Error", ex);
+    }
+}
+
+export async function deleteEvent(eventId){
+    try{
+        const jwt = localStorage.getItem('token');
+        const response = await axios.delete(apiEndpoint + `events/${eventId}/`, {headers: {Authorization: 'Bearer ' + jwt}});
+        console.log(response);
+
+        if (response.status === 204){
+            alert('Event has been deleted');
+            window.location='/'
+            return
+        }
+        return null;
+    }
+    catch(ex){
+        console.log("Error", ex);
+    }
+}
+
+export async function deleteSummary(summaryId){
+    try{
+        const jwt = localStorage.getItem('token');
+        const response = await axios.delete(apiEndpoint + `summarys/${summaryId}/`, {headers: {Authorization: 'Bearer ' + jwt}})
+        console.log(response);
+
+        if (response.status === 204){
+            alert('Summary has been deleted');
+            window.location='/'
             return
         }
         return null;

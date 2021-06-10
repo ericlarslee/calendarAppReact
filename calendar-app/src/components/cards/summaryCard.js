@@ -1,14 +1,15 @@
 import React from 'react';
-import { Card } from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
+import { deleteSummary } from '../Services/services';
 
 const SummaryCard = (props) => {
     return(
         <Card.Body>
             <blockquote className="blockquote mb-0">
-                <p>
+                <em>
                     {props.body}
-                    place button here later for changing
-                </p>
+                </em>
+                <Button onClick={() => deleteSummary(props.id)}>Delete Summary</Button>
             </blockquote>
         </Card.Body>
     );

@@ -1,14 +1,16 @@
 import React from 'react';
-import { ListGroupItem } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import { deleteEvent } from '../Services/services'
 
 const EventCard = (props) => {
     return(
         <>
-        <ListGroupItem>
             {props.name}
             <br />
             {props.description}
-        </ListGroupItem>
+            <br />
+            <Button onClick={() =>deleteEvent(props.id)}>Delete event</Button>
+            <br />
         </>
     );
 }

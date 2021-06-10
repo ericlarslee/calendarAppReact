@@ -11,7 +11,8 @@ const ListEventCards = (props) => {
         return
     }else{
         return (
-            <Card style={{ display:"flex", justifyContent: "center", verticalAlign: 'center', }}>
+            // <Card style={{ display:"flex", justifyContent: "center", verticalAlign: 'center', }}>
+                <>
                 <Card.Body>
                     <Card.Title>{props.date}</Card.Title>
                     {weather && <Card.Text>
@@ -30,7 +31,8 @@ const ListEventCards = (props) => {
 
                     </ListGroup>
                 </Card.Body>
-            </Card>
+            {/* // </Card> */}
+            </>
         );
     }
 }
