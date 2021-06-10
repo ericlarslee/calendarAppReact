@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import { Redirect } from 'react-router';
-import { getUserProfile, getAllUserEvents, getAllUserSummarys, getWeather, logoutUser, decodeJWT } from '../components/Services/services';
+import { getUserProfile, getAllUserEvents, getAllUserSummarys, getWeather, logoutUser, decodeJWT, postEvent, postSummary } from '../components/Services/services';
 import SummaryCard from '../components/cards/summaryCard';
 import ShowSummaryCard from '../components/cards/showSummaryCard.js';
 import EventCard from '../components/cards/eventCard.js';
@@ -12,6 +12,7 @@ import { Form, Button, Modal } from 'react-bootstrap';
 
 const Home = (props) => {
     const [user, setUser] = useState([]);
+    const [isCurrent, setIsCurrent] = useState(false);
     const [jwt, setJwt] = useState(localStorage.getItem('token'));
     const [weatherData, setWeatherData] = useState([]);
     const [weatherImage, setWeatherImage] = useState("");
@@ -20,29 +21,40 @@ const Home = (props) => {
     const [events, setEvents] = useState([]);
     const [summarys, setSummarys] = useState([]);
     const [dateForm, setDateForm] = useForm({date: ''});
-    const [showFutureEventForm, setShowFutureEventForm] = useState(true);
+    const [showFutureEventForm, setShowFutureEventForm] = useState(false);
     const [futureEventForm, setFutureEventForm] = useForm({name: '', description:'', date: '', user: '', })
     const [showEventForm, setShowEventForm] = useState(false);
     const [eventForm, setEventForm] = useForm({name: '', description:'', date: '', user: '', })
     const [showSummaryForm, setShowSummaryForm] = useState(false);
     const [summaryForm, setSummaryForm] = useForm({user: '', date: '', body: ''})
-    const [showCloseButton, setShowCloseButton] = useState(false);
+    const [showButton, setShowButton] = useState(true);
+
+    const FutureEventFormAction = () => {
+        setShowSummaryForm(false);
+        setShowEventForm(false);
+        setShowFutureEventForm(true);
+        setShowButton(false);
+    }
 
     const SummaryFormAction = () => {
         setShowSummaryForm(true);
         setShowEventForm(false);
-        setShowCloseButton(true);
+        setShowFutureEventForm(false);
+        setShowButton(false);
     }
 
     const EventFormAction = () => {
         setShowEventForm(true);
         setShowSummaryForm(false);
-        setShowCloseButton(true);
+        setShowFutureEventForm(false);
+        setShowButton(false);
     }
 
     const CloseForm = () => {
         setShowSummaryForm(false);
         setShowEventForm(false);
+        setShowFutureEventForm(false);
+        setShowButton(true);
     }
 
     useEffect(() => {
@@ -57,6 +69,7 @@ const Home = (props) => {
         console.log("JWT:", decodedJWT);
         eventForm.user = decodedJWT.user_id;
         summaryForm.user = decodedJWT.user_id;
+        futureEventForm.user = decodedJWT.user_id;
         let userData = await fetchUserData();
         setUser(userData.data[0]);
         let today = new Date().toISOString().substring(0,10);
@@ -86,8 +99,9 @@ const Home = (props) => {
         }
         let summaryData = await fetchSummaryData();
         setSummarys(summaryData);
+        setIsCurrent(true);
         
-    }, [weatherData]);
+    }, [weatherData, isCurrent]);
     
     useEffect(() => {
         console.log('user:', user, 'jwt:', jwt, 'datadate:', dataDate, 'userdate:', userDate, 'events:', events, 'summarys:', summarys, 'weatherData:', weatherData, 'selectedDate:', dateForm.date, 'event form:', eventForm, 'summary form:', summaryForm, 'future event form:', futureEventForm);
@@ -98,9 +112,9 @@ const Home = (props) => {
         if(events === undefined){
             return
         }else{
-            return events.map((event, index) =>
+            return events.map((event) =>
                 <EventCard
-                key={index}
+                key={event.id}
                 name={event.name}
                 description={event.description}
                 />
@@ -112,9 +126,9 @@ const Home = (props) => {
         if(summarys === undefined){
             return
         }else{
-            return summarys.map((summary, index) =>
+            return summarys.map((summary) =>
                 <SummaryCard
-                key={index}
+                key={summary.id}
                 body={summary.body}
                 />
             );
@@ -124,6 +138,25 @@ const Home = (props) => {
     return(
         <div>
             <Button onClick={logoutUser} type="submit">Logout</Button>
+            {showButton && <Button onClick={() => FutureEventFormAction()} type="submit">Add a future Event</Button>}
+            {showFutureEventForm &&
+            <Form>
+                <Form.Group className="mb-3" controlId="name">
+                    <Form.Label>Event Name</Form.Label>
+                    <Form.Control type="text" placeholder="Enter event name" name="name" value={futureEventForm.name} onChange={setFutureEventForm} />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="description">
+                    <Form.Label>Event Description</Form.Label>
+                    <Form.Control type="text" placeholder="Enter a description" name="description" value={futureEventForm.description} onChange={setFutureEventForm} />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="date">
+                    <Form.Label>Event Date</Form.Label>
+                    <Form.Control type="date" name="date" value={futureEventForm.date} onChange={setFutureEventForm} />
+                </Form.Group>
+                <Button onClick={() => postEvent(futureEventForm)} >Add event</Button>
+                <Button onClick={() => CloseForm()} type="submit">Close form</Button>
+            </Form>}
+            
             <Form>
                 <Form.Group className="mb-3" controlId="date">
                     <Form.Label>Selected Date:</Form.Label>
@@ -139,27 +172,12 @@ const Home = (props) => {
             image={weatherImage}
             />
             <ShowSummaryCard mapSummary={() => mapSummary(summarys)} />
-            {showCloseButton && <Button onClick={() => CloseForm()} type="submit">Close form</Button>}
-            <Button onClick={() => EventFormAction()} type="submit">Add an Event for Today</Button>
-            <Button onClick={() => SummaryFormAction()} type="submit">Add a Reflection for Today</Button>
+                        
+            {showButton && <Button onClick={() => EventFormAction()} type="submit">Add an Event for Today</Button>}
             
-            {showFutureEventForm &&
-            <Form>
-                <Form.Group className="mb-3" controlId="name">
-                    <Form.Label>Event Name</Form.Label>
-                    <Form.Control type="text" placeholder="Enter event name" name="name" value={futureEventForm.name} onChange={setFutureEventForm} />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="description">
-                    <Form.Label>Event Description</Form.Label>
-                    <Form.Control type="text" placeholder="Enter a description" name="description" value={futureEventForm.description} onChange={setFutureEventForm} />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="date">
-                    <Form.Label>Event Date</Form.Label>
-                    <Form.Control type="date" name="date" value={futureEventForm.date} onChange={setFutureEventForm} />
-                </Form.Group>
-            </Form>}
+            {showButton && <Button onClick={() => SummaryFormAction()} type="submit">Add a Reflection for Today</Button>}
             
-            {showEventForm && 
+            {showEventForm &&
             <Form>
                 <Form.Group className="mb-3" controlId="name">
                     <Form.Label>Event Name</Form.Label>
@@ -169,13 +187,16 @@ const Home = (props) => {
                     <Form.Label>Event Description</Form.Label>
                     <Form.Control type="text" placeholder="Enter a description" name="description" value={eventForm.description} onChange={setEventForm} />
                 </Form.Group>
+                <Button onClick={() => postEvent(eventForm)} >Add event</Button><Button onClick={() => CloseForm()} type="submit">Close form</Button>
             </Form>}
+            
             {showSummaryForm &&
             <Form>
                 <Form.Group className="mb-3" controlId="body">
                     <Form.Label>Enter a summary</Form.Label>
                     <Form.Control type="text-area" placeholder="Write an entry here" name="body" value={summaryForm.body} onChange={setSummaryForm} />
                 </Form.Group>
+                <Button onclick={() => postSummary(summaryForm)} >Add summary</Button><Button onClick={() => CloseForm()} type="submit">Close form</Button>
             </Form>
             }
 
