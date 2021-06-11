@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import { deleteEvent } from '../Services/services'
+import { deleteEvent } from '../Services/services';
+import deleteIcon from '../images/deleteIcon.png';
 
 const EventCard = (props) => {
     return(
@@ -8,8 +9,8 @@ const EventCard = (props) => {
             {props.name}
             <br />
             {props.description}
-            <br />
-            <Button onClick={() =>deleteEvent(props.id)}>Delete event</Button>
+            <img src={deleteIcon} onClick={() => deleteEvent(props.id)} height='20px' width='20px' style={{paddingLeft: '4px', cursor: 'pointer'}}/>
+            {/* <Button onClick={() =>deleteEvent(props.id)}>Delete event</Button> */}
             <br />
         </>
     );
