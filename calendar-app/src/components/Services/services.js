@@ -55,7 +55,7 @@ export async function getUserProfile(){
 export async function getUserEvents(userId, date){
     try {
         const jwt = localStorage.getItem('token');
-        const response = await axios.get(apiEndpoint + `events/?user=${userId}&date=${date}`, {headers: {Authorization: 'Bearer ' + jwt}});
+        const response = await axios.get(apiEndpoint + `events/?user=${userId -2}&date=${date}`, {headers: {Authorization: 'Bearer ' + jwt}});
 
         if (response.status === 200){
             return response.data;
@@ -72,9 +72,13 @@ export async function getAllUserEvents(){
         const jwt = localStorage.getItem('token');
         let userInfo = jwtDecode(jwt);
         let userId = userInfo.user_id;
-        const response = await axios.get(apiEndpoint + `events/?user=${userId}`, {headers: {Authorization: 'Bearer ' + jwt}});
+        const response = await axios.get(apiEndpoint + `events/?user=${userId -2}`, {headers: {Authorization: 'Bearer ' + jwt}});
 
-        if (response.status === 200){
+        if (response.status===400){
+            return response;
+        }
+
+        else if (response.status === 200){
             return  response;
         }
         return null;
@@ -87,7 +91,7 @@ export async function getAllUserEvents(){
 export async function getUserSummarys(userId, date){
     try {
         const jwt = localStorage.getItem('token');
-        const response = await axios.get(apiEndpoint + `summarys/?user=${userId}&date=${date}` , {headers: {Authorization: 'Bearer ' + jwt}});
+        const response = await axios.get(apiEndpoint + `summarys/?user=${userId -2}&date=${date}` , {headers: {Authorization: 'Bearer ' + jwt}});
 
         if (response.status === 200){
             return response;
@@ -104,7 +108,7 @@ export async function getAllUserSummarys(){
         const jwt = localStorage.getItem('token');
         let userInfo = jwtDecode(jwt);
         let userId = userInfo.user_id;
-        const response = await axios.get(apiEndpoint + `summarys/?user=${userId}` , {headers: {Authorization: 'Bearer ' + jwt}});
+        const response = await axios.get(apiEndpoint + `summarys/?user=${userId -2}` , {headers: {Authorization: 'Bearer ' + jwt}});
 
         if (response.status === 200){
             return response;

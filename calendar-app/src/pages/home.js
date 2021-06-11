@@ -67,9 +67,9 @@ const Home = (props) => {
             return window.location="/login";
         }
         let decodedJWT = await decodeJWT();
-        eventForm.user = decodedJWT.user_id;
-        summaryForm.user = decodedJWT.user_id;
-        futureEventForm.user = decodedJWT.user_id;
+        eventForm.user = (decodedJWT.user_id -2);
+        summaryForm.user = (decodedJWT.user_id -2);
+        futureEventForm.user = (decodedJWT.user_id-2);
         let userData = await getUserProfile();
         setUser(userData.data[0]);
         let today = new Date().toISOString().substring(0,10);
@@ -96,7 +96,10 @@ const Home = (props) => {
     useEffect(async() => {
         async function fetchEventData() {
             let eventResponse = await getAllUserEvents();
-            return eventResponse.data
+            if (eventResponse.status===400){
+                return;
+            }else{
+            return eventResponse.data}
         }
         let eventsData = await fetchEventData();
         setEvents(eventsData);
@@ -212,7 +215,7 @@ const Home = (props) => {
             </Card>            
             {showButton && <Button onClick={() => EventFormAction()} style={{marginLeft: '411px'}} type="submit">Add an Event for Today</Button>}
             
-            {showButton && <Button onClick={() => SummaryFormAction()} style={{marginLeft: '411px'}} type="submit">Add a Reflection for Today</Button>}
+            {showButton && dateForm.date===dataDate  && <Button onClick={() => SummaryFormAction()} style={{marginLeft: '411px'}} type="submit">Add a Reflection for Today</Button>}
             
             {showEventForm &&
             <Form>

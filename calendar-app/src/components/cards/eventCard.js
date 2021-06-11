@@ -8,11 +8,9 @@ const EventCard = (props) => {
         <>
             {props.name}
             <br />
-            <ul>
-                <li>{props.description}</li>
-            </ ul>
+            
+                {props.description}
             <img src={deleteIcon} onClick={() => deleteEvent(props.id)} height='20px' width='20px' style={{paddingLeft: '4px', cursor: 'pointer'}}/>
-            {/* <Button onClick={() =>deleteEvent(props.id)}>Delete event</Button> */}
             <br />
         </>
     );
