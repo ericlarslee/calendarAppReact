@@ -1,13 +1,11 @@
 import { React, useState, useEffect } from 'react';
-import { Redirect } from 'react-router';
-import { getUserProfile, getAllUserEvents, getAllUserSummarys, getWeather, logoutUser, decodeJWT, postEvent, postSummary, deleteEvent, deleteSummary, getCat, getDog, getIrohQuote } from '../components/Services/services';
+import { getUserProfile, getAllUserEvents, getAllUserSummarys, getWeather, logoutUser, decodeJWT, postEvent, postSummary, deleteEvent, getCat, getDog, getIrohQuote } from '../components/Services/services';
 import SummaryCard from '../components/cards/summaryCard';
 import ShowSummaryCard from '../components/cards/showSummaryCard.js';
 import EventCard from '../components/cards/eventCard.js';
 import ListEventCards from '../components/cards/listEventCards.js';
-import "react-datepicker/dist/react-datepicker.css";
 import useForm from '../components/formFiles/useForm';
-import { Form, Button, Container, Card } from 'react-bootstrap';
+import { Form, Button, Card } from 'react-bootstrap';
 
 
 
@@ -17,6 +15,7 @@ const Home = (props) => {
     const [cat, setCat] = useState();
     const [dog, setDog] = useState();
     const [quote, setQuote] = useState("");
+    const [theme, setTheme] = useState(localStorage.getItem('theme'));
     const [weatherData, setWeatherData] = useState([]);
     const [weatherImage, setWeatherImage] = useState("");
     const [dataDate, setDataDate] = useState();
@@ -69,7 +68,6 @@ const Home = (props) => {
             return userResponse
         }
         let decodedJWT = await decodeJWT();
-        console.log("JWT:", decodedJWT);
         eventForm.user = decodedJWT.user_id;
         summaryForm.user = decodedJWT.user_id;
         futureEventForm.user = decodedJWT.user_id;
@@ -149,13 +147,31 @@ const Home = (props) => {
         }
     }
 
+    async function setCatTheme(){
+        localStorage.setItem("theme", "cat");
+        setTheme("cat");
+    }
+
+    async function setDogTheme(){
+        localStorage.setItem("theme", "dog");
+        setTheme("dog");
+    }
+
+    async function setIrohTheme(){
+        localStorage.setItem("theme", "iroh");
+        setTheme("iroh");
+    }
+
     return(
         <div>
             {/* <Container className="display-flex" style={{display:"flex", justifyContent: "center"}}> */}
-            {/* <Row className="justify-content-center"></Row> */}
-            <img src={cat} style={{height: '400px'}} />
-            <img src={dog} style={{height: '400px'}} />
+            {/* <Row className="justify-content-center"> */}
+            {theme === "cat" && <img src={cat} style={{height: '400px'}} />}
+            {theme === "dog" && <img src={dog} style={{height: '400px'}} />}
             <div style={{position: 'relative', right:'-90%', font: '20px Arial, sans-serif'}}>
+                <Button onClick={setCatTheme} type="submit">Cat Theme</Button>
+                <Button onClick={setDogTheme} type="submit">Dog Theme</Button>
+                <Button onClick={setIrohTheme} type="submit">Iroh Theme</Button>
                 <Button variant="success" onClick={logoutUser} type="submit" style={{marginLeft: '60px', width: '61px',}}>Logout</Button>
             </div>
             {showButton && <Button onClick={() => FutureEventFormAction()} type="submit">Add a future Event</Button>}
@@ -221,9 +237,7 @@ const Home = (props) => {
                 <Button onClick={() => postSummary(summaryForm)} >Add summary</Button><Button onClick={() => CloseForm()} type="submit">Close form</Button>
             </Form>
             }
-            {/* </Row> */}
-        {/* </Container> */}
-        <h2>Random quote from Uncle Iroh: <em>{quote}</em></h2>
+        {theme === "iroh" && <h2>Random quote from Uncle Iroh: <em>{quote}</em></h2>}
         </div>
     );
 }
