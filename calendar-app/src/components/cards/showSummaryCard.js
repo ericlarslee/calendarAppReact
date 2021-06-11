@@ -7,6 +7,7 @@ const ShowSummaryCard = (props) => {
         
                 {/* <Card className="text-center justify-content-center" style={{border: '1px solid black'}} > */}
                     <Card.Body >
+                        Summary:
                         {props.mapSummary()}
 
                     </Card.Body>

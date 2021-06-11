@@ -27,6 +27,7 @@ const ListEventCards = (props) => {
                 </Card.Body>
                 <Card.Body>
                     <ListGroup className="list-group-flush">
+                        Events: <br />
                         {props.mapEvents()}
 
                     </ListGroup>

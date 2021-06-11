@@ -59,9 +59,6 @@ const Home = (props) => {
         setShowButton(true);
     }
 
-    useEffect(() => {
-    },[props])
-
     useEffect(async() => {
         if(jwt===null || jwt===undefined){
             return window.location="/login";
@@ -112,9 +109,9 @@ const Home = (props) => {
         
     }, [weatherData]);
     
-    useEffect(() => {
-        console.log('user:', user, 'jwt:', jwt, 'datadate:', dataDate, 'userdate:', userDate, 'events:', events, 'summarys:', summarys, 'weatherData:', weatherData, 'selectedDate:', dateForm.date, 'event form:', eventForm, 'summary form:', summaryForm, 'future event form:', futureEventForm);
-    },[user, jwt, dataDate, userDate, events, summarys, weatherData, dateForm, futureEventForm])
+    // useEffect(() => {
+    //     console.log('user:', user, 'jwt:', jwt, 'datadate:', dataDate, 'userdate:', userDate, 'events:', events, 'summarys:', summarys, 'weatherData:', weatherData, 'selectedDate:', dateForm.date, 'event form:', eventForm, 'summary form:', summaryForm, 'future event form:', futureEventForm);
+    // },[user, jwt, dataDate, userDate, events, summarys, weatherData, dateForm, futureEventForm])
 
 
     function mapEvents(events){
