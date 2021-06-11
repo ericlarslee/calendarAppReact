@@ -14,7 +14,7 @@ import { LoginScreen } from './pages/login';
 export default function App() {
   return (
     <Router>
-      <div className="App bg">
+      <div className="App bg" >
         <Switch>
           <Route path='/' exact component ={Home} />
           <Route path='/login' component={LoginScreen} />

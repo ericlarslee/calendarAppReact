@@ -221,3 +221,42 @@ export function toRegisterPage(){
 export function toLoginPage(){
     return window.location = '/login'
 }
+
+export async function getCat(){
+    try{    
+        const response = await axios.get(`https://api.thecatapi.com/v1/images/search?api_key=9de00689-97e8-48bd-84ea-4ec3affcd7a7`)
+        if (response.status === 200){
+            return response.data[0].url
+        }
+        return null;
+    }
+    catch(ex){
+        console.log('Error', ex);
+    }
+}
+
+export async function getDog(){
+    try{
+    const response = await axios.get('https://dog.ceo/api/breeds/image/random');
+        if (response.status === 200){
+                return response.data.message
+            }
+            return null;
+    }
+    catch(ex){
+        console.log('Error', ex);
+    }
+}
+
+export async function getIrohQuote(){
+    try{
+        const response = await axios.get("http://api.thedragonofthe.rest/quote");
+        if (response.status === 200){
+            return response.data.quote
+        }
+        return null;
+}
+catch(ex){
+    console.log('Error', ex);
+}
+}

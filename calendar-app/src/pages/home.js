@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import { Redirect } from 'react-router';
-import { getUserProfile, getAllUserEvents, getAllUserSummarys, getWeather, logoutUser, decodeJWT, postEvent, postSummary, deleteEvent, deleteSummary } from '../components/Services/services';
+import { getUserProfile, getAllUserEvents, getAllUserSummarys, getWeather, logoutUser, decodeJWT, postEvent, postSummary, deleteEvent, deleteSummary, getCat, getDog, getIrohQuote } from '../components/Services/services';
 import SummaryCard from '../components/cards/summaryCard';
 import ShowSummaryCard from '../components/cards/showSummaryCard.js';
 import EventCard from '../components/cards/eventCard.js';
@@ -14,6 +14,9 @@ import { Form, Button, Container, Card } from 'react-bootstrap';
 const Home = (props) => {
     const [user, setUser] = useState([]);
     const [jwt, setJwt] = useState(localStorage.getItem('token'));
+    const [cat, setCat] = useState();
+    const [dog, setDog] = useState();
+    const [quote, setQuote] = useState("");
     const [weatherData, setWeatherData] = useState([]);
     const [weatherImage, setWeatherImage] = useState("");
     const [dataDate, setDataDate] = useState();
@@ -79,6 +82,12 @@ const Home = (props) => {
         summaryForm.date = today;
         dateForm.date = today;
         setUserDate(today2);
+        let catData = await getCat();
+        setCat(catData);
+        let dogData = await getDog();
+        setDog(dogData);
+        let quoteData = await getIrohQuote();
+        setQuote(quoteData);
     }, []);
     
     useEffect(async() =>{
@@ -141,15 +150,17 @@ const Home = (props) => {
     }
 
     return(
-        <div style={{}}>
+        <div>
             {/* <Container className="display-flex" style={{display:"flex", justifyContent: "center"}}> */}
             {/* <Row className="justify-content-center"></Row> */}
-            <div style={{position: 'relative', right:'-90%'}}>
-                <Button variant="success" onClick={logoutUser} type="submit">Logout</Button>
+            <img src={cat} style={{height: '400px'}} />
+            <img src={dog} style={{height: '400px'}} />
+            <div style={{position: 'relative', right:'-90%', font: '20px Arial, sans-serif'}}>
+                <Button variant="success" onClick={logoutUser} type="submit" style={{marginLeft: '60px', width: '61px',}}>Logout</Button>
             </div>
             {showButton && <Button onClick={() => FutureEventFormAction()} type="submit">Add a future Event</Button>}
             {showFutureEventForm &&
-            <Form>
+            <Form style={{font: '20px Arial, sans-serif'}}>
                 <Form.Group className="mb-3" controlId="name">
                     <Form.Label>Event Name</Form.Label>
                     <Form.Control type="text" placeholder="Enter event name" name="name" value={futureEventForm.name} onChange={setFutureEventForm} />
@@ -166,7 +177,7 @@ const Home = (props) => {
                 <Button onClick={() => CloseForm()} type="submit">Close form</Button>
             </Form>}
             
-            <Form style={{}}>
+            <Form style={{font: '20px Arial, sans-serif'}}>
                 <Form.Group className="mb-3" controlId="date">
                     <Form.Label>Selected Date:</Form.Label>
                     <Form.Control type="date" placeholder={dataDate} name="date" value={dateForm.date} onChange={setDateForm} />
@@ -174,7 +185,7 @@ const Home = (props) => {
                     </Form.Text>
                 </Form.Group>
             </Form>
-            <Card style={{display:"block", justifyContent: "center", textAlign: 'center', verticalAlign: 'middle', border: '1px solid black', marginTop: '10%', width: '50%', position:'relative', left:'25%'}}>
+            <Card style={{display:"block", justifyContent: "center", textAlign: 'center', verticalAlign: 'middle', border: '1px solid black', marginTop: '5%', width: '30%', position:'relative', left:'25%'}}>
                 <ListEventCards mapEvents={() => mapEvents(events)}
                 date={userDate}
                 name={user.first_name}
@@ -184,9 +195,9 @@ const Home = (props) => {
                 
                 <ShowSummaryCard mapSummary={() => mapSummary(summarys)} />
             </Card>            
-            {showButton && <Button onClick={() => EventFormAction()} type="submit">Add an Event for Today</Button>}
+            {showButton && <Button onClick={() => EventFormAction()} style={{marginLeft: '411px'}} type="submit">Add an Event for Today</Button>}
             
-            {showButton && <Button onClick={() => SummaryFormAction()} type="submit">Add a Reflection for Today</Button>}
+            {showButton && <Button onClick={() => SummaryFormAction()} style={{marginLeft: '411px'}} type="submit">Add a Reflection for Today</Button>}
             
             {showEventForm &&
             <Form>
@@ -212,6 +223,7 @@ const Home = (props) => {
             }
             {/* </Row> */}
         {/* </Container> */}
+        <h2>Random quote from Uncle Iroh: <em>{quote}</em></h2>
         </div>
     );
 }
