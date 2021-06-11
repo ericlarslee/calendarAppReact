@@ -40,9 +40,6 @@ export async function loginUser(user){
 export async function getUserProfile(){
     try {
         const jwt = localStorage.getItem('token');
-        if(jwt===undefined || jwt ===null){
-            return window.location = '/login';
-        }
         const response = await axios.get(apiEndpoint + 'profile', {headers: {Authorization: 'Bearer ' + jwt}});
 
         if (response.status === 200){

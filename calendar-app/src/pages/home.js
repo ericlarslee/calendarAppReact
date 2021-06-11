@@ -5,7 +5,7 @@ import ShowSummaryCard from '../components/cards/showSummaryCard.js';
 import EventCard from '../components/cards/eventCard.js';
 import ListEventCards from '../components/cards/listEventCards.js';
 import useForm from '../components/formFiles/useForm';
-import { Form, Button, Card } from 'react-bootstrap';
+import { Form, Button, Card, Row, Col } from 'react-bootstrap';
 
 
 
@@ -63,15 +63,14 @@ const Home = (props) => {
     },[props])
 
     useEffect(async() => {
-        async function fetchUserData() {
-            let userResponse = await getUserProfile();
-            return userResponse
+        if(jwt===null || jwt===undefined){
+            return window.location="/login";
         }
         let decodedJWT = await decodeJWT();
         eventForm.user = decodedJWT.user_id;
         summaryForm.user = decodedJWT.user_id;
         futureEventForm.user = decodedJWT.user_id;
-        let userData = await fetchUserData();
+        let userData = await getUserProfile();
         setUser(userData.data[0]);
         let today = new Date().toISOString().substring(0,10);
         let today2 = new Date().toDateString().substring(0,10);
@@ -163,12 +162,12 @@ const Home = (props) => {
     }
 
     return(
-        <div>
-            {/* <Container className="display-flex" style={{display:"flex", justifyContent: "center"}}> */}
-            {/* <Row className="justify-content-center"> */}
-            {theme === "cat" && <img src={cat} style={{height: '400px'}} />}
-            {theme === "dog" && <img src={dog} style={{height: '400px'}} />}
-            <div style={{position: 'relative', right:'-90%', font: '20px Arial, sans-serif'}}>
+        <div style={{height: '100%', width: '100%'}}>
+            <div style={{maxWidth:'50%', maxHeight:'10%'}}>
+                {theme === "cat" && <img src={cat} style={{maxHeight: '100px'}} />}
+                {theme === "dog" && <img src={dog} style={{height: '100px'}} />}
+            </div>
+            <div style={{position: 'absolute', right:'5%', font: '20px Arial, sans-serif', width: '400px'}}>
                 <Button onClick={setCatTheme} type="submit">Cat Theme</Button>
                 <Button onClick={setDogTheme} type="submit">Dog Theme</Button>
                 <Button onClick={setIrohTheme} type="submit">Iroh Theme</Button>
