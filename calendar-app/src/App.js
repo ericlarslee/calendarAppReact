@@ -7,14 +7,13 @@ import {
 import Home from './pages/home';
 import { RegisterScreen } from './pages/signUp';
 import { LoginScreen } from './pages/login';
-// import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 
 export default function App() {
   return (
     <Router>
-      <div className="App bg" >
+      <div className="App " >
         <Switch>
           <Route path='/' exact component ={Home} />
           <Route path='/login' component={LoginScreen} />

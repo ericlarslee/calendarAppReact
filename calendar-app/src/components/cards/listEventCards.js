@@ -4,9 +4,11 @@ import { Card, ListGroup } from 'react-bootstrap';
 
 const ListEventCards = (props) => {
     const [weather, setWeather]= useState([]);
+    
     useEffect(()=> {
-    setWeather(props.weatherData);
+        setWeather(props.weatherData);
     },[props])
+    
     if(props.weatherData===undefined){
         return
     }else{

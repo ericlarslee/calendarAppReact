@@ -5,7 +5,8 @@ import ShowSummaryCard from '../components/cards/showSummaryCard.js';
 import EventCard from '../components/cards/eventCard.js';
 import ListEventCards from '../components/cards/listEventCards.js';
 import useForm from '../components/formFiles/useForm';
-import { Form, Button, Card, Row, Col } from 'react-bootstrap';
+import { Form, Button, Card, Row, Col, Container } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 
@@ -162,58 +163,76 @@ const Home = (props) => {
     }
 
     return(
-        <div style={{height: '100%', width: '100%'}}>
-            <div style={{maxWidth:'50%', maxHeight:'10%'}}>
+        <Container className="justify-content-md-center">
+            {/* <div style={{maxWidth:'50%', maxHeight:'10%'}}>
                 {theme === "cat" && <img src={cat} style={{maxHeight: '100px'}} />}
                 {theme === "dog" && <img src={dog} style={{height: '100px'}} />}
-            </div>
-            <div style={{position: 'absolute', right:'5%', font: '20px Arial, sans-serif', width: '400px'}}>
-                <Button onClick={setCatTheme} type="submit">Cat Theme</Button>
-                <Button onClick={setDogTheme} type="submit">Dog Theme</Button>
-                <Button onClick={setIrohTheme} type="submit">Iroh Theme</Button>
-                <Button variant="success" onClick={logoutUser} type="submit" style={{marginLeft: '60px', width: '61px',}}>Logout</Button>
-            </div>
-            {showButton && <Button onClick={() => FutureEventFormAction()} type="submit">Add a future Event</Button>}
-            {showFutureEventForm &&
-            <Form style={{font: '20px Arial, sans-serif'}}>
-                <Form.Group className="mb-3" controlId="name">
-                    <Form.Label>Event Name</Form.Label>
-                    <Form.Control type="text" placeholder="Enter event name" name="name" value={futureEventForm.name} onChange={setFutureEventForm} />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="description">
-                    <Form.Label>Event Description</Form.Label>
-                    <Form.Control type="text" placeholder="Enter a description" name="description" value={futureEventForm.description} onChange={setFutureEventForm} />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="date">
-                    <Form.Label>Event Date</Form.Label>
-                    <Form.Control type="date" name="date" value={futureEventForm.date} onChange={setFutureEventForm} />
-                </Form.Group>
-                <Button onClick={() => postEvent(futureEventForm)} >Add event</Button>
-                <Button onClick={() => CloseForm()} type="submit">Close form</Button>
-            </Form>}
-            
-            <Form style={{font: '20px Arial, sans-serif'}}>
-                <Form.Group className="mb-3" controlId="date">
-                    <Form.Label>Selected Date:</Form.Label>
-                    <Form.Control type="date" placeholder={dataDate} name="date" value={dateForm.date} onChange={setDateForm} />
-                    <Form.Text className="text-muted">
-                    </Form.Text>
-                </Form.Group>
-            </Form>
-            <Card style={{display:"block", justifyContent: "center", textAlign: 'center', verticalAlign: 'middle', border: '1px solid black', marginTop: '5%', width: '30%', position:'relative', left:'25%'}}>
-                <ListEventCards mapEvents={() => mapEvents(events)}
-                date={userDate}
-                name={user.first_name}
-                weatherData={weatherData}
-                image={weatherImage}
-                />
-                
-                <ShowSummaryCard mapSummary={() => mapSummary(summarys)} />
-            </Card>            
-            {showButton && <Button onClick={() => EventFormAction()} style={{marginLeft: '411px'}} type="submit">Add an Event for Today</Button>}
-            
-            {showButton && dateForm.date===dataDate  && <Button onClick={() => SummaryFormAction()} style={{marginLeft: '411px'}} type="submit">Add a Reflection for Today</Button>}
-            
+            </div> */}
+            <Row>
+                <Col>
+                {showButton && <Button onClick={() => FutureEventFormAction()} type="submit">Add a future Event</Button>}
+                </Col>
+                <Col className="d-flex justify-content-end">
+                    <Button size="sm" onClick={setCatTheme} type="submit">Cat Theme</Button>
+                </Col>
+                <Col className="d-flex justify-content-end">
+                    <Button size="sm" onClick={setDogTheme} type="submit">Dog Theme</Button>
+                </Col>
+                <Col className="d-flex justify-content-end">
+                    <Button size="sm" onClick={setIrohTheme} type="submit">Iroh Theme</Button>
+                </Col>
+                <Col className="d-flex justify-content-end">
+                    <Button variant="danger" size="sm" onClick={logoutUser} type="submit">Logout</Button>
+                </Col>
+            </Row>
+            <Row>
+                {showFutureEventForm &&
+                <Form style={{font: '20px Arial, sans-serif'}}>
+                    <Form.Group className="mb-3" controlId="name">
+                        <Form.Label>Event Name</Form.Label>
+                        <Form.Control type="text" placeholder="Enter event name" name="name" value={futureEventForm.name} onChange={setFutureEventForm} />
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="description">
+                        <Form.Label>Event Description</Form.Label>
+                        <Form.Control type="text" placeholder="Enter a description" name="description" value={futureEventForm.description} onChange={setFutureEventForm} />
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="date">
+                        <Form.Label>Event Date</Form.Label>
+                        <Form.Control type="date" name="date" value={futureEventForm.date} onChange={setFutureEventForm} />
+                    </Form.Group>
+                    <Button onClick={() => postEvent(futureEventForm)} >Add event</Button>
+                    <Button onClick={() => CloseForm()} type="submit">Close form</Button>
+                </Form>}
+            </Row>
+            <Row>
+                <Form style={{width: '18rem', font: '20px Arial, sans-serif'}}>
+                    <Form.Group className="mb-3" controlId="date">
+                        <Form.Label>Selected Date:</Form.Label><Form.Control type="date" placeholder={dataDate} name="date" value={dateForm.date} onChange={setDateForm} />
+                        <Form.Text className="text-muted">
+                        </Form.Text>
+                    </Form.Group>
+                </Form>
+            </Row>
+            {/* <Card style={{display:"block", justifyContent: "center", textAlign: 'center', verticalAlign: 'middle', border: '1px solid black', marginTop: '5%', width: '30%', position:'relative', left:'25%'}}> */}
+            <Row className="justify-content-md-center mb-3">
+                <Card border="secondary" style={{ width: '18rem'}} >
+                    <ListEventCards mapEvents={() => mapEvents(events)}
+                    date={userDate}
+                    name={user.first_name}
+                    weatherData={weatherData}
+                    image={weatherImage}
+                    />
+                    <ShowSummaryCard mapSummary={() => mapSummary(summarys)} />
+                </Card>            
+            </Row>
+            <Row className="justify-content-md-center">
+                <Col xs lg="2">
+                    {showButton && <Button size="sm" onClick={() => EventFormAction()} type="submit">Add an Event</Button>}
+                </Col>
+                <Col xs lg="2">
+                    {showButton && dateForm.date===dataDate  && <Button size="sm" onClick={() => SummaryFormAction()} type="submit">Add a Reflection</Button>}
+                </Col>
+            </Row>
             {showEventForm &&
             <Form>
                 <Form.Group className="mb-3" controlId="name">
@@ -237,7 +256,7 @@ const Home = (props) => {
             </Form>
             }
         {theme === "iroh" && <h2>Random quote from Uncle Iroh: <em>{quote}</em></h2>}
-        </div>
+        </Container>
     );
 }
 export default Home;
